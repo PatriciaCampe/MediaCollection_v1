@@ -1,0 +1,50 @@
+﻿@model IEnumerable<MediaCollection.ServiceLayer.ViewModels.ListMediaViewModel>
+
+@{
+    ViewData["Title"] = "Movie List";
+}
+
+<h1>Overview Movies</h1>
+<p>
+    <a asp-action="Create">Create New Movie</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> </th>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Country)</th>
+            <th>@Html.DisplayNameFor(model => model.Genre)</th>
+            <th>Media</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td><img src="@item.PosterUrl" class="img-thumbnail" style="height:100px;width:70px" /></td>
+            <td>@item.Title</td>
+            <td>@item.Country</td>
+            <td>@item.Genre</td>
+            <td>@item.Descriminator</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-controller="Media" asp-action="Index">Back to List</a>
+</div>
+
+
+
+
+@*<td>@Html.DisplayFor(viewitem => item.Title)</td>
+    <td>@Html.DisplayFor(viewitem => item.ReleaseDate)</td>
+    <td>@Html.DisplayFor(viewitem => item.typeof(SelectListItem) )</td>*@

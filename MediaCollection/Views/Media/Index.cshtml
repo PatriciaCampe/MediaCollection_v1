@@ -1,0 +1,80 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering;
+@model MediaCollection.ServiceLayer.ViewModels.ListMediaGenreViewModel
+
+@{
+    ViewData["Title"] = "Media List";
+}
+
+@*<h1>Overview Media</h1>*@
+
+<table class="table table-bordered bg-danger">
+    <thead>
+        <tr>
+            <th><a asp-controller="Movie" asp-action="Index" class="text-center btn-outline-info">MOVIES </a></th>
+            <th><a asp-controller="Serie" asp-action="Index" class="btn-outline-info">SERIES </a></th>
+            <th><a asp-controller="Music" asp-action="Index" class="btn-outline-info">MUSIC </a></th>
+            <th><a asp-controller="Podcast" asp-action="Index" class="btn-outline-info">PODCASTS </a></th>
+        </tr>
+    </thead>
+</table>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>@Html.DisplayNameFor(model => model.ListMediaViewModels[0].Title)</th>
+            <th>@Html.DisplayNameFor(model => model.ListMediaViewModels[0].Country)</th>
+            <th>@Html.DisplayNameFor(model => model.ListMediaViewModels[0].Genre)</th>
+            <th>Media</th>
+        </tr>
+        <tr>
+            <th></th>
+            <th>
+                <form asp-controller="Media" asp-action="Index" method="get">
+                    <p>
+                        <input type="text" name="SearchTitle" />
+                        <input type="Submit" value="Search" />
+                    </p>
+                </form>
+            </th>
+            <th>
+            </th>
+            <th>
+                <form asp-controller="Media" asp-action="Index" method="get">
+                    <p>
+                        <select asp-for="MediaGenre" asp-items="Model.Genres">
+                            @*<select asp-for="MediaGenre" asp-items="Model.Genres as IEnumerable<SelectListItem>">*@
+                            <option value="">All</option>
+                        </select>
+                        <input type="Submit" value="Search" />
+                    </p>
+                </form>
+            </th>
+            <th>
+                @*<form asp-controller="Media" asp-action="Index" method="get">
+                        <p>
+                            <input type="text" name="SearchType"  maxlength="8"/>
+                            <input type="Submit" value="Search" />
+                        </p>
+                    </form>*@
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.ListMediaViewModels)
+        {
+            <tr>
+                <td><img src="@item.PosterUrl" class="img-thumbnail" style="height:100px;width:70px" /></td>
+                <td>@item.Title</td>
+                <td>@item.Country</td>
+                <td>@item.Genre</td>
+                <td>@item.Descriminator</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@*<td>@item.ReleaseDate.ToString("yyyy-MM-dd")</td>*@
+@*<td>@Html.DisplayFor(viewitem => item.Title)</td>
+    <td>@Html.DisplayFor(viewitem => item.ReleaseDate)</td>
+    <td>@Html.DisplayFor(viewitem => item.typeof(SelectListItem) )</td>*@
