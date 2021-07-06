@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<MediaCollection.ServiceLayer.ViewModels.ListMediaViewModel>
 
 @{
-    ViewData["Title"] = "Movie List";
+    ViewData["Title"] = "Music List";
 }
 
 <h1>Overview Movies</h1>
 <p>
-    <a asp-action="Create">Create New Movie</a>
+    <a asp-action="Create">Create New Serie</a>
 </p>
 
 <table class="table">
@@ -28,16 +28,14 @@
             <td>@item.Country</td>
             <td>@item.Genre</td>
             <td>@item.Descriminator</td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
         </tr>
         }
+
     </tbody>
 </table>
 
+
+
 <div>
-    <a asp-controller="Media" asp-action="Index">Back to MediaList</a>
+    <a asp-controller="Media" asp-action="Index">Back to List</a>
 </div>

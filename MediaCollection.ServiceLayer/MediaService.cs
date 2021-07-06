@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using System.Web.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MediaCollection.ServiceLayer
@@ -25,13 +24,7 @@ namespace MediaCollection.ServiceLayer
         public ListMediaGenreViewModel SearchMediaOnTitle(string searchString)
         {
             var media = _appDbCtx.Media.Where(t => t.Title.Contains(searchString)).OrderBy(_ => _.Title).ToList();
-            
-            var mediaGenreVM = new ListMediaGenreViewModel
-            {
-                Genres = new SelectList(_appDbCtx.Media.Select(_ => _.Genre).Distinct().ToList()),
-                ListMediaViewModels = ConvertMedia2View(media)
-            };
-            return mediaGenreVM;
+            return ConvertMedia2View(media);
         }
  
         //----------------------------------------------------------------------------//
@@ -40,39 +33,21 @@ namespace MediaCollection.ServiceLayer
         public ListMediaGenreViewModel SearchMediaOnGenre(string mediaGenre)
         {
             var media = _appDbCtx.Media.Where(t => t.Genre == mediaGenre).OrderBy(_ => _.Title).ToList();
-
-            var mediaGenreVM = new ListMediaGenreViewModel
-            {
-                Genres = new SelectList(_appDbCtx.Media.Select(_ => _.Genre).Distinct().ToList()),
-                ListMediaViewModels = ConvertMedia2View(media)
-            };
-            return mediaGenreVM;
+            return ConvertMedia2View(media);
         }
         //----------------------------------------------------------------------------//
         // Select  all Media and sort on title                                        //
         //----------------------------------------------------------------------------//
-        public ListMediaGenreViewModel ListMediaGenre()
+        public ListMediaGenreViewModel ListMedia()
         {
             var media = _appDbCtx.Media.OrderBy(_ => _.Title).ToList();
-            var mediaGenreVM = new ListMediaGenreViewModel
-            {
-                Genres = new SelectList(_appDbCtx.Media.Select(g => g.Genre).Distinct().ToList()),
-                ListMediaViewModels = ConvertMedia2View(media)
-            };
-            return mediaGenreVM;
+            return ConvertMedia2View(media);
         }
-        //----------------------------------------------------------------------------//
-        // Select  all Media and sort on title                                        //
-        //----------------------------------------------------------------------------//
-        public List<ListMediaViewModel> ListMedia()
-        {
-            var media = _appDbCtx.Media.OrderBy(_ => _.Title).ToList();
-            return ConvertMedia2View(media); 
-        }
+ 
         //----------------------------------------------------------------------------//
         // Convert Media to MediaViewModel                                            //
         //----------------------------------------------------------------------------//
-        public List<ListMediaViewModel> ConvertMedia2View(List<Media> media)
+        public ListMediaGenreViewModel ConvertMedia2View(List<Media> media)
         {
             List<ListMediaViewModel> mediaViewList = new List<ListMediaViewModel>();
             foreach (var mediaItem in media)
@@ -88,19 +63,26 @@ namespace MediaCollection.ServiceLayer
                 };
                 mediaViewList.Add(mediaView);
             }
-            return mediaViewList;
+
+            var mediaGenreVM = new ListMediaGenreViewModel
+            {
+                Genres = new SelectList(_appDbCtx.Media.Select(_ => _.Genre).Distinct().ToList()),
+                ListMediaViewModels = mediaViewList
+            };
+
+            return mediaGenreVM;
         }
+
         //----------------------------------------------------------------------------//
         // Select  all Media of type MOVIE and sort on title                          //
         //----------------------------------------------------------------------------//
         public List<ListMediaViewModel> ListMovies()
         {
             List<Movie> movies = _appDbCtx.Media.OfType<Movie>().ToList();
+
             List<ListMediaViewModel> movieList = new List<ListMediaViewModel>();
             foreach (var movie in movies)
             {
-                if (movie is Movie)
-                {
                     ListMediaViewModel movieListItem = new ListMediaViewModel()
                     {
                         Id = movie.Id,
@@ -111,7 +93,6 @@ namespace MediaCollection.ServiceLayer
                         Descriminator = movie.GetType().Name
                     };
                     movieList.Add(movieListItem);
-                }
             }
 
             return movieList;
@@ -177,20 +158,3 @@ namespace MediaCollection.ServiceLayer
     }
 }
 
-
-////----------------------------------------------------------------------------//
-//// Search all Media on country and sort on title                              //
-////----------------------------------------------------------------------------//
-//public List<ListMediaViewModel> SearchMediaOnCountry(string searchString)
-//{
-//    var media = _appDbCtx.Media.Where(t => t.Country.Contains(searchString)).OrderBy(_ => _.Title).ToList();
-//    return ConvertMedia2View(media);
-//}
-////----------------------------------------------------------------------------//
-//// Search all Media on title and sort on title                                //
-////----------------------------------------------------------------------------//
-//public List<ListMediaViewModel> SearchMediaOnType(string searchString)
-//{
-//    var media = _appDbCtx.Media.Where(t => t.GetType().Name.Contains(searchString)).OrderBy(_ => _.Title).ToList();
-//    return ConvertMedia2View(media);
-//}

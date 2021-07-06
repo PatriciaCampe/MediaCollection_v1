@@ -25,7 +25,6 @@ namespace MediaCollection.ServiceLayer
 
         public DetailMovieViewModel GetMovie(int id)
         {
-            
             var movie = _appDbCtx.Movies
                 //.Include(mg => mg.MediaGenres)
                 //.ThenInclude(g => g.Genre)
@@ -35,6 +34,7 @@ namespace MediaCollection.ServiceLayer
             {
                 Id = movie.Id,
                 Title = movie.Title,
+                Description = movie.Description,
                 Length = movie.Length,
                 Country = movie.Country,
                 ReleaseDate = movie.ReleaseDate,
@@ -44,14 +44,35 @@ namespace MediaCollection.ServiceLayer
 
             return dvm;
         }
+        public UpdateMovieViewModel GetMovie4Update(int id)
+        {
+            var movie = _appDbCtx.Movies
+                //.Include(mg => mg.MediaGenres)
+                //.ThenInclude(g => g.Genre)
+                .FirstOrDefault(m => m.Id == id);
+
+            var uvm = new UpdateMovieViewModel()
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Description = movie.Description,
+                Length = movie.Length,
+                Country = movie.Country,
+                ReleaseDate = movie.ReleaseDate,
+                Url = movie.Url,
+                ExistingGenres = movie.Genre
+            };
+
+            uvm.Genres = new SelectList(_appDbCtx.MovieGenres.Select(g => g.Name).ToList());
+            return uvm;
+        }
         public AddMovieViewModel GetMovieGenres()
         {
             AddMovieViewModel vm = new AddMovieViewModel();
             vm.ReleaseDate = DateTime.Now;
 
             vm.Genres = new SelectList(_appDbCtx.MovieGenres.Select(g => g.Name).ToList());
-            //vm.Genres = movieGenres.Select(g => new System.Web.Mvc.SelectListItem() { Value = g.Id.ToString(), Text = g.Name }).ToList();
-
+         
             return vm;
         }
 
@@ -79,19 +100,19 @@ namespace MediaCollection.ServiceLayer
             _appDbCtx.Movies.Add(movie);
             _appDbCtx.SaveChanges();
         }
-        public void UpdateMovie(int id,AddMovieViewModel addMovieViewModel)
+        public void UpdateMovie(int id,UpdateMovieViewModel updMovieViewModel)
         {
             Movie movie = _appDbCtx.Movies.Find(id);
-            movie.Title = addMovieViewModel.Title;
-            movie.Length = addMovieViewModel.Length;
-            movie.Country = addMovieViewModel.Country;
-            movie.ReleaseDate = addMovieViewModel.ReleaseDate;
-            movie.Url = addMovieViewModel.Url;
-            movie.Description = addMovieViewModel.Description;
+            movie.Title = updMovieViewModel.Title;
+            movie.Length = updMovieViewModel.Length;
+            movie.Country = updMovieViewModel.Country;
+            movie.ReleaseDate = updMovieViewModel.ReleaseDate;
+            movie.Url = updMovieViewModel.Url;
+            movie.Description = updMovieViewModel.Description;
 
             var movieGenres = "";
             //new List<MediaGenre>();
-            foreach (var selectedGenre in addMovieViewModel.SelectedGenres)
+            foreach (var selectedGenre in updMovieViewModel.SelectedGenres)
             {
                 //movieGenres.Add(new MediaGenre() { GenreId = selectedGenre });
                 //Convert.ToInt32(selectedGenre.Value), Name = selectedGenre.Text });

@@ -8,13 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-
-
 namespace MediaCollection.Controllers
 {
     public class MovieController : Controller
     {
-        // TODO: split services
         private readonly MediaService _mediaService;
         private readonly MovieService _movieService;
         //private readonly AddMovieViewModel _addMovieViewModel;
@@ -67,19 +64,19 @@ namespace MediaCollection.Controllers
 
         public IActionResult Edit(int id)
         {
-            return View(_movieService.GetMovie(id));
+            return View(_movieService.GetMovie4Update(id));
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, [FromForm] AddMovieViewModel addMovieViewModel)
+        public IActionResult Edit(int id, [FromForm] UpdateMovieViewModel updMovieViewModel)
         {
 
-            if (!TryValidateModel(addMovieViewModel))
+            if (!TryValidateModel(updMovieViewModel))
             {
-                return View(addMovieViewModel);
+                return View(updMovieViewModel);
             }
 
-            _movieService.UpdateMovie(id, addMovieViewModel);
+            _movieService.UpdateMovie(id, updMovieViewModel);
             return RedirectToAction(nameof(Index));
         }
 
@@ -115,3 +112,77 @@ namespace MediaCollection.Controllers
 
     }
 }
+
+
+
+
+// TO DELETE //
+///////////////
+// GET: MediaController/Details/5
+//public ActionResult Details(int id)
+//{
+//    return View();
+//}
+
+//// GET: MediaController/Create
+//public ActionResult Create()
+//{
+//    return View();
+//}
+
+//// POST: MediaController/Create
+//[HttpPost]
+//[ValidateAntiForgeryToken]
+//public ActionResult Create(IFormCollection collection)
+//{
+//    try
+//    {
+//        return RedirectToAction(nameof(Index));
+//    }
+//    catch
+//    {
+//        return View();
+//    }
+//}
+
+//// GET: MediaController/Edit/5
+//public ActionResult Edit(int id)
+//{
+//    return View();
+//}
+
+//// POST: MediaController/Edit/5
+//[HttpPost]
+//[ValidateAntiForgeryToken]
+//public ActionResult Edit(int id, IFormCollection collection)
+//{
+//    try
+//    {
+//        return RedirectToAction(nameof(Index));
+//    }
+//    catch
+//    {
+//        return View();
+//    }
+//}
+
+//// GET: MediaController/Delete/5
+//public ActionResult Delete(int id)
+//{
+//    return View();
+//}
+
+//// POST: MediaController/Delete/5
+//[HttpPost]
+//[ValidateAntiForgeryToken]
+//public ActionResult Delete(int id, IFormCollection collection)
+//{
+//    try
+//    {
+//        return RedirectToAction(nameof(Index));
+//    }
+//    catch
+//    {
+//        return View();
+//    }
+//}
